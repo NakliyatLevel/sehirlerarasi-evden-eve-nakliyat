@@ -14,8 +14,9 @@ async function getReview(id: string) {
   return review
 }
 
-export default async function EditReviewPage({ params }: { params: { id: string } }) {
-  const review = await getReview(params.id)
+export default async function EditReviewPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const review = await getReview(id)
 
   return (
     <div className="space-y-6">

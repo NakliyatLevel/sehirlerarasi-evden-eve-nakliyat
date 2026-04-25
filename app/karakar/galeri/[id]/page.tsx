@@ -14,8 +14,9 @@ async function getGalleryItem(id: string) {
   return item
 }
 
-export default async function EditGalleryPage({ params }: { params: { id: string } }) {
-  const item = await getGalleryItem(params.id)
+export default async function EditGalleryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const item = await getGalleryItem(id)
 
   return (
     <div className="space-y-6">

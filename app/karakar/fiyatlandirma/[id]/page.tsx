@@ -29,8 +29,9 @@ async function updatePricing(formData: FormData) {
   redirect('/karakar/fiyatlandirma')
 }
 
-export default async function EditPricingPage({ params }: { params: { id: string } }) {
-  const pricing = await getPricing(params.id)
+export default async function EditPricingPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const pricing = await getPricing(id)
   const valueStr = typeof pricing.value === 'object' 
     ? JSON.stringify(pricing.value, null, 2) 
     : String(pricing.value)

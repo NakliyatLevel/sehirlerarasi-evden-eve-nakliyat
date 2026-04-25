@@ -11,8 +11,9 @@ async function getFeature(id: string) {
   return feature
 }
 
-export default async function EditFeaturePage({ params }: { params: { id: string } }) {
-  const feature = await getFeature(params.id)
+export default async function EditFeaturePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const feature = await getFeature(id)
 
   return (
     <div className="space-y-6">

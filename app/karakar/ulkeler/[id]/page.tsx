@@ -27,8 +27,9 @@ async function updateCountry(formData: FormData) {
   redirect('/karakar/ulkeler')
 }
 
-export default async function EditCountryPage({ params }: { params: { id: string } }) {
-  const country = await getCountry(params.id)
+export default async function EditCountryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const country = await getCountry(id)
 
   return (
     <div className="space-y-6">
