@@ -6,10 +6,10 @@ import { prisma } from '@/lib/db'
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
-    const { filename } = params
+    const { filename } = await params
 
     if (!filename) {
       return NextResponse.json({ error: 'Dosya adı gerekli' }, { status: 400 })
@@ -44,10 +44,10 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
-    const { filename } = params
+    const { filename } = await params
     const body = await request.json()
 
     if (!filename) {

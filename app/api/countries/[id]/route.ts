@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const country = await prisma.country.findUnique({ where: { id: params.id } })
+    const { id } = await params
+    const country = await prisma.country.findUnique({ where: { id } })
     if (!country) return NextResponse.json({ error: 'Ülke bulunamadı' }, { status: 404 })
     return NextResponse.json(country)
   } catch (error) {
@@ -11,11 +12,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const body = await request.json()
     const country = await prisma.country.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         code: body.code,
         name: body.name,
@@ -34,9 +36,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await prisma.country.delete({ where: { id: params.id } })
+    const { id } = await params
+    await prisma.country.delete({ where: { id } })
     return NextResponse.json({ message: 'Ülke silindi' })
   } catch (error) {
     return NextResponse.json({ error: 'Ülke silinemedi' }, { status: 500 })

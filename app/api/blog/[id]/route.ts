@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const post = await prisma.post.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!post) {
@@ -17,8 +18,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const body = await request.json()
 
     // Slug değişmişse ve başka bir post'ta kullanılıyorsa hata ver
@@ -26,12 +28,12 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       where: { slug: body.slug },
     })
 
-    if (existingPost && existingPost.id !== params.id) {
+    if (existingPost && existingPost.id !== id) {
       return NextResponse.json({ error: 'Bu slug zaten kullanılıyor' }, { status: 400 })
     }
 
     const post = await prisma.post.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: body.title,
         slug: body.slug,
@@ -52,10 +54,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     await prisma.post.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ message: 'Blog yazısı silindi' })
