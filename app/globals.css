@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 204 60% 25%;
+    --card: 0 0% 100%;
+    --card-foreground: 204 60% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 204 60% 25%;
+    --primary: 204 60% 25%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 14 91% 54%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 204 60% 25%;
+    --destructive: 14 91% 54%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 204 60% 25%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes marquee-left {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-right {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  .animate-marquee-left {
+    animation: marquee-left 48s linear infinite;
+  }
+
+  .animate-marquee-right {
+    animation: marquee-right 48s linear infinite;
+  }
+
+  .animate-marquee-left:hover,
+  .animate-marquee-right:hover {
+    animation-play-state: paused;
+  }
+}
