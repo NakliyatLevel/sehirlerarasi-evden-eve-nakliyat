@@ -1,8 +1,10 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://sehirlerarasi-evden-eve-nakliyat.vercel.app'
 
   // Static pages
   const staticPages = [
@@ -72,7 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await prisma.post.findMany({
     where: { published: true },
     select: { slug: true, updatedAt: true },
-  })
+  }).catch(() => [])
 
   const blogPages = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
@@ -85,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = await prisma.page.findMany({
     where: { published: true },
     select: { slug: true, updatedAt: true },
-  })
+  }).catch(() => [])
 
   const dynamicPages = pages.map((page) => ({
     url: `${baseUrl}/${page.slug}`,
@@ -98,7 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const serviceAreas = await prisma.serviceArea.findMany({
     where: { active: true },
     select: { slug: true, updatedAt: true },
-  })
+  }).catch(() => [])
 
   const areaPages = serviceAreas.map((area) => ({
     url: `${baseUrl}/bolge/${area.slug}`,
@@ -111,7 +113,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const services = await prisma.service.findMany({
     where: { active: true },
     select: { slug: true, updatedAt: true },
-  })
+  }).catch(() => [])
 
   const servicePages = services.map((service) => ({
     url: `${baseUrl}/hizmet/${service.slug}`,
@@ -124,7 +126,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const solutions = await prisma.solution.findMany({
     where: { active: true },
     select: { slug: true, updatedAt: true },
-  })
+  }).catch(() => [])
 
   const solutionPages = solutions.map((solution) => ({
     url: `${baseUrl}/cozum/${solution.slug}`,
