@@ -1,7 +1,5 @@
-import { unlink } from 'fs/promises'
-import { join } from 'path'
 import { NextRequest, NextResponse } from 'next/server'
-import { existsSync } from 'fs'
+import { del } from '@vercel/blob'
 import { prisma } from '@/lib/db'
 
 export async function DELETE(
@@ -15,7 +13,6 @@ export async function DELETE(
       return NextResponse.json({ error: 'Dosya adı gerekli' }, { status: 400 })
     }
 
-    // Database'den kontrol et
     const media = await prisma.media.findUnique({
       where: { filename },
     })
@@ -24,14 +21,11 @@ export async function DELETE(
       return NextResponse.json({ error: 'Medya bulunamadı' }, { status: 404 })
     }
 
-    const filepath = join(process.cwd(), 'public/uploads', filename)
-
-    // Dosyayı sil (varsa)
-    if (existsSync(filepath)) {
-      await unlink(filepath)
+    // Vercel Blob'dan sil
+    if (media.url && media.url.startsWith('https://')) {
+      await del(media.url)
     }
 
-    // Database'den sil
     await prisma.media.delete({
       where: { filename },
     })
