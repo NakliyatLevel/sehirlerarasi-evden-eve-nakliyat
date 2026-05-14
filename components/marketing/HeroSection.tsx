@@ -1,10 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { Phone, ShieldCheck, Award, MapPin, MessageCircle, Instagram, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import {
+  ShieldCheck,
+  Award,
+  MapPin,
+  Instagram,
+  ArrowRight,
+  Users,
+  FileText,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const [activeCity, setActiveCity] = useState(0)
@@ -125,18 +132,14 @@ export default function HeroSection() {
       <div className="container mx-auto px-4 py-10 md:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4 text-primary" />
-              <span>{cities[activeCity]}&apos;dan Türkiye&apos;nin Her Noktasına</span>
-            </div>
 
             <div className="mt-6 space-y-3">
               <h1 className="text-4xl md:text-[2.7rem] md:leading-[1] font-extrabold leading-[1.05] text-foreground">
-                Şehirlerarası Evden Eve <span className="text-orange-500">Nakliyat</span>
+                Şehirlerarası Evden Eve <span className="text-secondary">Nakliyat</span>
               </h1>
 
               <div className="text-2xl md:text-3xl font-semibold text-foreground">
-                Level ile <span className="font-[cursive] italic text-orange-600">Seviye Atlayın.</span>
+                Türkiye’nin Her Yerine Güvenle Taşıyoruz!
               </div>
 
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
@@ -145,127 +148,128 @@ export default function HeroSection() {
               </p>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <Link href={`tel:${(settings.phone || '4446502').toString().replace(/\s/g, '')}`} className="block">
-                <Button
-                  size="lg"
-                  className="w-full h-16 sm:h-[62px] justify-start gap-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6"
-                >
-                  <span className="flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                      <Phone className="w-5 h-5" />
-                    </span>
-                    <span className="text-left leading-tight">
-                      <span className="block text-sm font-semibold">Hemen Ara</span>
-                      <span className="block text-xs text-white/90">{(settings.phone || '444 65 02').toString()}</span>
-                    </span>
-                  </span>
-                  <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
-                </Button>
-              </Link>
+            <div className="mt-6">
+              <div className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-4 shadow-sm">
+                <div className="grid grid-cols-2 gap-3 md:gap-6 items-stretch">
+                  <div className="space-y-3 text-center md:text-left">
+                    <div className="flex items-center gap-3 justify-center h-full md:gap-4 md:items-center">
+                      <div className="flex justify-center md:justify-center">
+                        <div className="w-14 md:w-[4.85rem] lg:w-[5.7rem]">
+                          <Image
+                            src="/trust.webp"
+                            alt="Şikayet yok güven rozeti"
+                            width={430}
+                            height={414}
+                            priority
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1 flex-1 md:text-center">
+                        <p className="text-emerald-600 font-black tracking-tight text-lg md:text-[1.575rem]">
+                          Şikayet Yok!
+                        </p>
+                        <p className="text-muted-foreground text-sm md:text-base leading-snug">
+                          Müşteri memnuniyeti bizim için en büyük gururdur.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-              {settings.whatsapp ? (
-                <a
-                  href={`https://wa.me/${settings.whatsapp.toString().replace(/\s/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button
-                    size="lg"
-                    className="w-full h-16 sm:h-[62px] justify-start gap-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                        <MessageCircle className="w-5 h-5" />
-                      </span>
-                      <span className="text-left leading-tight">
-                        <span className="block text-sm font-semibold">WhatsApp</span>
-                        <span className="block text-xs text-white/90">Hızlı Yazın</span>
-                      </span>
-                    </span>
-                    <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
-                  </Button>
-                </a>
-              ) : (
-                <div />
-              )}
-
-              {settings.instagram ? (
-                <a
-                  href={settings.instagram.toString()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button
-                    size="lg"
-                    className="w-full h-16 sm:h-[62px] justify-start gap-4 text-white hover:opacity-95 px-6"
-                    style={{
-                      backgroundImage:
-                        'linear-gradient(135deg, #405DE6 0%, #5B51D8 12%, #833AB4 24%, #C13584 38%, #E1306C 52%, #FD1D1D 66%, #F56040 78%, #FCAF45 90%, #FFDC80 100%)',
-                    }}
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                        <Instagram className="w-5 h-5" />
-                      </span>
-                      <span className="text-left leading-tight">
-                        <span className="block text-sm font-semibold">Instagram</span>
-                        <span className="block text-xs text-white/90">Bizi Takip Edin</span>
-                      </span>
-                    </span>
-                    <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
-                  </Button>
-                </a>
-              ) : (
-                <div />
-              )}
+                  <div className="border-l border-emerald-100 pl-3 md:pl-6 space-y-3">
+                    {[
+                      {
+                        icon: Users,
+                        title: '600+',
+                        description: 'Mutlu Müşteri',
+                      },
+                      {
+                        icon: ShieldCheck,
+                        title: 'Güvenli & Sigortalı',
+                        description: 'Taşıma Garantisi',
+                      },
+                      {
+                        icon: FileText,
+                        title: 'Sözleşmeli Hizmet',
+                        description: '%100 Güven',
+                      },
+                    ].map((item, index) => (
+                      <div key={item.title} className="flex items-start gap-3">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-emerald-200 bg-white text-emerald-600 flex items-center justify-center">
+                          <item.icon className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="text-base md:text-lg font-bold text-emerald-700">{item.title}</p>
+                          <p className="text-xs md:text-sm text-foreground font-medium">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-6 rounded-xl border border-border bg-white shadow-sm overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="p-4 md:p-5 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-xl font-bold">
-                    G
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                className="rounded-2xl border border-emerald-100 bg-white shadow-sm flex items-center gap-4 sm:gap-5 min-h-[70px]"
+                style={{ padding: '1.5rem' }}
+              >
+                <div className="w-12 h-12 rounded-full bg-white border border-emerald-50 shadow flex items-center justify-center">
+                  <Image
+                    src="/google.png"
+                    alt="Google puanı"
+                    width={40}
+                    height={40}
+                    className="w-8 h-8 object-contain"
+                  />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-foreground">Google&apos;da 4.9/5</p>
+                  <div className="text-xl text-orange-500 leading-none">★★★★★</div>
+                  <p className="text-sm text-muted-foreground mt-1">600+ Mutlu Müşteri</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {settings.instagram && (
+                  <a
+                    href={settings.instagram.toString()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Button
+                      size="lg"
+                      className="w-full min-h-[63px] justify-start gap-4 text-white hover:opacity-95"
+                      style={{
+                        padding: '1rem',
+                        backgroundImage:
+                          'linear-gradient(135deg, #405DE6 0%, #5B51D8 12%, #833AB4 24%, #C13584 38%, #E1306C 52%, #FD1D1D 66%, #F56040 78%, #FCAF45 90%, #FFDC80 100%)',
+                      }}
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+                          <Instagram className="w-5 h-5" />
+                        </span>
+                        <span className="text-left leading-tight">
+                          <span className="block text-sm font-semibold">Instagram</span>
+                          <span className="block text-xs text-white/90">Bizi Takip Edin</span>
+                        </span>
+                      </span>
+                      <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
+                    </Button>
+                  </a>
+                )}
+
+                <div className="rounded-2xl border border-border bg-white shadow-sm flex items-center gap-4 min-h-[63px] px-4 py-4">
+                  <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <div className="font-semibold text-foreground">Google&apos;da 4.9/5</div>
-                    <div className="flex items-center gap-1 text-orange-500 leading-none mt-1">
-                      <span>★★★★★</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-1">850+ doğrulanmış yorum</div>
+                    <p className="text-sm font-semibold text-foreground">Türkiye Geneli Hizmet</p>
+                    <p className="text-xs text-muted-foreground">81 ilde profesyonel taşıma</p>
                   </div>
                 </div>
-
-                <div className="border-t md:border-t-0 md:border-l border-border p-4 md:p-5">
-                  <div className="font-semibold text-emerald-600">Şikayet Yok!</div>
-                  <div className="text-sm text-foreground font-medium mt-1">0 şikayet kaydı</div>
-                  <div className="text-sm text-muted-foreground mt-1">Bugüne kadar hiçbir şikayet bulunmamaktadır.</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5 text-primary" />
-                </div>
-                <div className="text-sm font-medium text-foreground">%100 Sigortalı Taşıma</div>
-              </div>
-
-              <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                  <Award className="w-5 h-5 text-primary" />
-                </div>
-                <div className="text-sm font-medium text-foreground">15+ Yıl Tecrübe</div>
-              </div>
-
-              <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-primary" />
-                </div>
-                <div className="text-sm font-medium text-foreground">Türkiye Geneli Hizmet</div>
               </div>
             </div>
           </div>
