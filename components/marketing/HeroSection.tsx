@@ -176,7 +176,7 @@ export default function HeroSection() {
                     </div>
                   </div>
 
-                  <div className="border-l border-emerald-100 pl-3 md:pl-6 space-y-3">
+                  <div className="border-l border-emerald-100 pl-5 md:pl-6 space-y-3 ml-3 md:ml-0">
                     {[
                       {
                         icon: Users,
@@ -199,8 +199,8 @@ export default function HeroSection() {
                           <item.icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-[0.8rem] md:text-lg font-bold text-emerald-700">{item.title}</p>
-                          <p className="text-[0.66rem] md:text-sm text-foreground font-medium">{item.description}</p>
+                          <p className="text-[0.76rem] md:text-lg font-bold text-emerald-700">{item.title}</p>
+                          <p className="text-[0.63rem] md:text-sm text-foreground font-medium">{item.description}</p>
                         </div>
                       </div>
                     ))}
