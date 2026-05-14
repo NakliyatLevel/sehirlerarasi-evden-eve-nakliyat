@@ -199,7 +199,7 @@ export default function HeroSection() {
                           <item.icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-[0.76rem] md:text-lg font-bold text-emerald-700">{item.title}</p>
+                          <p className="text-[0.68rem] md:text-lg font-bold text-emerald-700">{item.title}</p>
                           <p className="text-[0.63rem] md:text-sm text-foreground font-medium">{item.description}</p>
                         </div>
                       </div>
