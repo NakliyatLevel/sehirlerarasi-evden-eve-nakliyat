@@ -129,16 +129,16 @@ export default function HeroSection() {
         <div className="absolute -right-6 top-44 h-96 w-96 rounded-full border border-sky-200/40 md:block hidden" />
       </div>
 
-      <div className="container mx-auto px-4 py-10 md:py-16 relative z-10">
+      <div className="container mx-auto px-4 pt-4 pb-6 md:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
           <div className="max-w-3xl">
 
             <div className="mt-6 space-y-3">
-              <h1 className="text-4xl md:text-[2.7rem] md:leading-[1] font-extrabold leading-[1.05] text-foreground">
+              <h1 className="text-[2.21rem] lg:text-[2.6rem] md:leading-[1] font-extrabold leading-[1.05] text-foreground">
                 Şehirlerarası Evden Eve <span className="text-secondary">Nakliyat</span>
               </h1>
 
-              <div className="text-2xl md:text-3xl font-semibold text-foreground">
+              <div className="text-[1.35rem] md:text-[1.7rem] font-semibold text-foreground">
                 Türkiye’nin Her Yerine Güvenle Taşıyoruz!
               </div>
 
@@ -169,14 +169,14 @@ export default function HeroSection() {
                         <p className="text-emerald-600 font-black tracking-tight text-lg md:text-[1.575rem]">
                           Şikayet Yok!
                         </p>
-                        <p className="text-muted-foreground text-sm md:text-base leading-snug">
+                        <p className="text-muted-foreground text-[0.78rem] md:text-base leading-snug">
                           Müşteri memnuniyeti bizim için en büyük gururdur.
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="border-l border-emerald-100 pl-5 md:pl-6 space-y-3 ml-3 md:ml-0">
+                  <div className="border-l border-emerald-100 pl-6 md:pl-6 space-y-3 ml-4 md:ml-0">
                     {[
                       {
                         icon: Users,
@@ -185,16 +185,16 @@ export default function HeroSection() {
                       },
                       {
                         icon: ShieldCheck,
-                        title: 'Güvenli & Sigortalı',
+                        title: 'Sigortalı',
                         description: 'Taşıma Garantisi',
                       },
                       {
                         icon: FileText,
-                        title: 'Sözleşmeli Hizmet',
+                        title: 'Sözleşmeli',
                         description: '%100 Güven',
                       },
                     ].map((item, index) => (
-                      <div key={item.title} className="flex items-start gap-3">
+                      <div key={item.title} className="flex items-center md:items-start gap-3">
                         <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-emerald-200 bg-white text-emerald-600 flex items-center justify-center">
                           <item.icon className="w-5 h-5" />
                         </div>
