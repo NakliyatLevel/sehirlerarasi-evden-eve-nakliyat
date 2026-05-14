@@ -138,8 +138,8 @@ export default function HeroSection() {
                 Şehirlerarası Evden Eve <span className="text-secondary">Nakliyat</span>
               </h1>
 
-              <div className="text-[1.35rem] md:text-[1.7rem] font-semibold text-foreground">
-                Türkiye’nin Her Yerine Güvenle Taşıyoruz!
+              <div className="text-[1.15rem] md:text-[1.45rem] font-semibold text-foreground">
+                Türkiye'nin Her Yerine Güvenle Taşıyoruz!
               </div>
 
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
@@ -169,7 +169,7 @@ export default function HeroSection() {
                         <p className="text-emerald-600 font-black tracking-tight text-lg md:text-[1.575rem]">
                           Şikayet Yok!
                         </p>
-                        <p className="text-muted-foreground text-[0.74rem] md:text-base leading-snug">
+                        <p className="text-muted-foreground text-[0.7rem] md:text-base leading-snug">
                           Müşteri memnuniyeti bizim için en büyük gururdur.
                         </p>
                       </div>
