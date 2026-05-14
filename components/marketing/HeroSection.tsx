@@ -230,7 +230,7 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-3">
                 {settings.instagram && (
                   <a
                     href={settings.instagram.toString()}
@@ -261,13 +261,13 @@ export default function HeroSection() {
                   </a>
                 )}
 
-                <div className="rounded-2xl border border-border bg-white shadow-sm flex items-center gap-4 min-h-[63px] px-4 py-4">
+                <div className="rounded-2xl border border-border bg-white shadow-sm flex items-center gap-4 min-h-[63px] px-4 py-3 md:py-4">
                   <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Türkiye Geneli Hizmet</p>
-                    <p className="text-xs text-muted-foreground">81 ilde profesyonel taşıma</p>
+                    <p className="text-[0.81rem] md:text-sm font-semibold text-foreground">Türkiye Geneli Hizmet</p>
+                    <p className="text-[0.7rem] md:text-xs text-muted-foreground">81 ilde profesyonel taşıma</p>
                   </div>
                 </div>
               </div>
