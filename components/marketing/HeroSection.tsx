@@ -139,7 +139,7 @@ export default function HeroSection() {
               </h1>
 
               <div className="text-[1.15rem] md:text-[1.45rem] font-semibold text-foreground">
-                Türkiye'nin Her Yerine Güvenle Taşıyoruz!
+                Türkiye&apos;nin Her Yerine Güvenle Taşıyoruz!
               </div>
 
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
