@@ -129,7 +129,7 @@ export default function HeroSection() {
         <div className="absolute -right-6 top-44 h-96 w-96 rounded-full border border-sky-200/40 md:block hidden" />
       </div>
 
-      <div className="container mx-auto px-4 pt-4 pb-6 md:py-16 relative z-10">
+      <div className="container mx-auto px-4 pt-0 pb-2 md:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
           <div className="max-w-3xl">
 
@@ -169,14 +169,14 @@ export default function HeroSection() {
                         <p className="text-emerald-600 font-black tracking-tight text-lg md:text-[1.575rem]">
                           Şikayet Yok!
                         </p>
-                        <p className="text-muted-foreground text-[0.78rem] md:text-base leading-snug">
+                        <p className="text-muted-foreground text-[0.74rem] md:text-base leading-snug">
                           Müşteri memnuniyeti bizim için en büyük gururdur.
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="border-l border-emerald-100 pl-6 md:pl-6 space-y-3 ml-4 md:ml-0">
+                  <div className="border-l border-emerald-100 pl-6 md:pl-6 ml-4 md:ml-0" style={{ display: 'flex', flexDirection: 'column', gap: '0.675rem' }}>
                     {[
                       {
                         icon: Users,
