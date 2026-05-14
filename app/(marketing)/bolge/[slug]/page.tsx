@@ -79,7 +79,11 @@ export default async function ServiceAreaDetailPage({
   return (
     <>
       <PageHeading
-        title={`${area.city} Evden Eve Nakliyat`}
+        title={
+          area.city.includes('Evden Eve Nakliyat')
+            ? area.city
+            : `${area.city} Evden Eve Nakliyat`
+        }
         description={area.description || `${area.city} ve çevresinde profesyonel evden eve nakliyat hizmeti sunuyoruz`}
         breadcrumbs={[
           { label: 'Hizmet Bölgeleri', href: '/hizmet-bolgeleri' },

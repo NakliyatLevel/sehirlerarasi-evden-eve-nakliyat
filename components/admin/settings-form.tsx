@@ -47,6 +47,23 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
     { key: 'seo_title', label: 'SEO Başlık', type: 'text' },
     { key: 'seo_description', label: 'SEO Açıklama', type: 'textarea' },
     { key: 'seo_keywords', label: 'SEO Anahtar Kelimeler', type: 'text' },
+    { key: 'hero_price_1_0_min', label: 'Hero Fiyat 1+0 (Min)', type: 'text' },
+    { key: 'hero_price_1_0_max', label: 'Hero Fiyat 1+0 (Max)', type: 'text' },
+    { key: 'hero_price_1_1_min', label: 'Hero Fiyat 1+1 (Min)', type: 'text' },
+    { key: 'hero_price_1_1_max', label: 'Hero Fiyat 1+1 (Max)', type: 'text' },
+    { key: 'hero_price_2_1_min', label: 'Hero Fiyat 2+1 (Min)', type: 'text' },
+    { key: 'hero_price_2_1_max', label: 'Hero Fiyat 2+1 (Max)', type: 'text' },
+    { key: 'hero_price_3_1_min', label: 'Hero Fiyat 3+1 (Min)', type: 'text' },
+    { key: 'hero_price_3_1_max', label: 'Hero Fiyat 3+1 (Max)', type: 'text' },
+    { key: 'hero_price_4_1_min', label: 'Hero Fiyat 4+1 (Min)', type: 'text' },
+    { key: 'hero_price_4_1_max', label: 'Hero Fiyat 4+1 (Max)', type: 'text' },
+    { key: 'smtp_host', label: 'SMTP Host', type: 'text' },
+    { key: 'smtp_port', label: 'SMTP Port', type: 'text' },
+    { key: 'smtp_secure', label: 'SMTP Secure (true/false)', type: 'text' },
+    { key: 'smtp_user', label: 'SMTP User', type: 'text' },
+    { key: 'smtp_pass', label: 'SMTP Pass', type: 'text' },
+    { key: 'smtp_from', label: 'SMTP From (Opsiyonel)', type: 'text' },
+    { key: 'smtp_to', label: 'SMTP To (Opsiyonel)', type: 'text' },
   ]
 
   const pageDescFields = [

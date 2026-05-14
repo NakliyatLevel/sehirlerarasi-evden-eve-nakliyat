@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Otomatik Backup Script - Her 30 dakikada bir çalışır
+# Otomatik Backup Script - Her 3 saatte bir çalışır
 # Kullanım: npm run db:auto-backup
 
 # Renkler
@@ -9,7 +9,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${YELLOW}🔄 Otomatik yedekleme başlatılıyor...${NC}"
-echo -e "${YELLOW}⏰ Her 30 dakikada bir backup alınacak${NC}"
+echo -e "${YELLOW}⏰ Her 3 saatte bir backup alınacak${NC}"
 echo -e "${YELLOW}⌨️  Durdurmak için Ctrl+C${NC}"
 echo ""
 
@@ -27,8 +27,8 @@ while true; do
         echo -e "${RED}[$NOW] ❌ Backup başarısız${NC}"
     fi
     
-    # 30 dakika bekle (1800 saniye)
-    echo -e "${YELLOW}⏳ Sonraki backup: $(date -v+30M +"%H:%M:%S")${NC}"
+    # 3 saat bekle (10800 saniye)
+    echo -e "${YELLOW}⏳ Sonraki backup: $(date -v+3H +"%H:%M:%S")${NC}"
     echo ""
-    sleep 1800
+    sleep 10800
 done

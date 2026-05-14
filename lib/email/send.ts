@@ -1,4 +1,5 @@
-import { transporter } from './config'
+import { prisma } from '@/lib/db'
+import { getTransporter } from './config'
 
 export async function sendEmail({
   to,
@@ -12,8 +13,18 @@ export async function sendEmail({
   text?: string
 }) {
   try {
-    const info = await transporter.sendMail({
-      from: process.env.SMTP_USER,
+    const result = await getTransporter()
+    if (!result) return { success: false, error: new Error('SMTP ayarları bulunamadı') }
+
+    const smtpFromSetting = await prisma.siteSetting.findUnique({
+      where: { key: 'smtp_from' },
+      select: { value: true },
+    })
+
+    const fromAddress = smtpFromSetting?.value || result.smtpUser
+
+    const info = await result.transporter.sendMail({
+      from: fromAddress,
       to,
       subject,
       html,
@@ -45,7 +56,7 @@ export async function sendContactEmail(data: {
   )
 
   return await sendEmail({
-    to: process.env.SMTP_USER || '',
+    to: (await prisma.siteSetting.findUnique({ where: { key: 'smtp_to' }, select: { value: true } }))?.value || process.env.SMTP_USER || '',
     subject: `Yeni İletişim Formu - ${data.name}`,
     html,
   })
@@ -74,8 +85,39 @@ export async function sendQuoteEmail(data: {
   )
 
   return await sendEmail({
-    to: process.env.SMTP_USER || '',
+    to: (await prisma.siteSetting.findUnique({ where: { key: 'smtp_to' }, select: { value: true } }))?.value || process.env.SMTP_USER || '',
     subject: `Yeni Teklif Talebi - ${data.name}`,
+    html,
+  })
+}
+
+export async function sendHeroQuickQuoteEmail(data: {
+  fullName: string
+  phone: string
+  fromCity: string
+  toCity: string
+  roomType: string
+  priceMin?: number
+  priceMax?: number
+}) {
+  const { render } = await import('@react-email/components')
+  const HeroQuickQuoteEmail = (await import('@/emails/HeroQuickQuoteEmail')).default
+
+  const html = await render(
+    HeroQuickQuoteEmail({
+      fullName: data.fullName,
+      phone: data.phone,
+      fromCity: data.fromCity,
+      toCity: data.toCity,
+      roomType: data.roomType,
+      priceMin: data.priceMin,
+      priceMax: data.priceMax,
+    })
+  )
+
+  return await sendEmail({
+    to: (await prisma.siteSetting.findUnique({ where: { key: 'smtp_to' }, select: { value: true } }))?.value || process.env.SMTP_USER || '',
+    subject: `Hero Teklif Talebi - ${data.fullName}`,
     html,
   })
 }

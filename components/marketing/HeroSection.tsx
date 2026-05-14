@@ -2,27 +2,24 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { Phone, Shield, Award, TrendingUp, ArrowRight, CheckCircle2, Star, Users, Truck } from 'lucide-react'
+import { Phone, ShieldCheck, Award, MapPin, MessageCircle, Instagram, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const [activeCity, setActiveCity] = useState(0)
   const [settings, setSettings] = useState<any>({})
-  const [stats, setStats] = useState({
-    customers: 0,
-    years: 0,
-    cities: 0,
-    rating: 0
+  const [heroForm, setHeroForm] = useState({
+    fromCity: '',
+    toCity: '',
+    roomType: '1+1',
+    fullName: '',
+    phone: '',
   })
+  const [heroSubmitLoading, setHeroSubmitLoading] = useState(false)
+  const [heroSubmitMessage, setHeroSubmitMessage] = useState('')
 
   const cities = ['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya']
-  const features = [
-    { icon: Shield, text: 'Sigortalı Taşıma', color: 'text-primary' },
-    { icon: Award, text: '15+ Yıl Tecrübe', color: 'text-primary' },
-    { icon: TrendingUp, text: 'Uygun Fiyat', color: 'text-primary' }
-  ]
 
   useEffect(() => {
     setMounted(true)
@@ -33,35 +30,81 @@ export default function HeroSection() {
         setSettings(data)
       })
       .catch(() => {})
-    
-    const duration = 2000
-    const steps = 60
-    const interval = duration / steps
-
-    let step = 0
-    const timer = setInterval(() => {
-      step++
-      const progress = step / steps
-      setStats({
-        customers: Math.floor(10000 * progress),
-        years: Math.floor(15 * progress),
-        cities: Math.floor(81 * progress),
-        rating: Math.min(4.9, 4.9 * progress)
-      })
-      if (step >= steps) clearInterval(timer)
-    }, interval)
 
     const cityTimer = setInterval(() => {
       setActiveCity(prev => (prev + 1) % cities.length)
     }, 3000)
 
     return () => {
-      clearInterval(timer)
       clearInterval(cityTimer)
     }
   }, [cities.length])
 
   if (!mounted) return null
+
+  const isHeroPriceReady =
+    Boolean(heroForm.fromCity.trim()) &&
+    Boolean(heroForm.toCity.trim()) &&
+    Boolean(heroForm.roomType.trim()) &&
+    Boolean(heroForm.fullName.trim()) &&
+    Boolean(heroForm.phone.trim())
+
+  const heroRoomKey = heroForm.roomType.replace('+', '_')
+  const heroPriceMinRaw = settings[`hero_price_${heroRoomKey}_min`]
+  const heroPriceMaxRaw = settings[`hero_price_${heroRoomKey}_max`]
+  const heroPriceMin = Number.parseInt((heroPriceMinRaw || '').toString().replace(/\./g, '').replace(/\s/g, ''), 10)
+  const heroPriceMax = Number.parseInt((heroPriceMaxRaw || '').toString().replace(/\./g, '').replace(/\s/g, ''), 10)
+  const hasHeroPriceRange = Number.isFinite(heroPriceMin) && Number.isFinite(heroPriceMax) && heroPriceMin > 0 && heroPriceMax > 0
+
+  const heroWhatsappHref = (() => {
+    if (!settings.whatsapp) return ''
+    const whatsappNumber = settings.whatsapp.toString().replace(/\s/g, '')
+    const text =
+      `Hızlı Teklif Talebi%0A` +
+      `Nereden: ${encodeURIComponent(heroForm.fromCity)}%0A` +
+      `Nereye: ${encodeURIComponent(heroForm.toCity)}%0A` +
+      `Ev Tipi: ${encodeURIComponent(heroForm.roomType)}%0A` +
+      `Ad Soyad: ${encodeURIComponent(heroForm.fullName)}%0A` +
+      `Telefon: ${encodeURIComponent(heroForm.phone)}`
+    return `https://wa.me/${whatsappNumber}?text=${text}`
+  })()
+
+  const handleHeroSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setHeroSubmitMessage('')
+    setHeroSubmitLoading(true)
+
+    try {
+      const response = await fetch('/api/hero-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: heroForm.fullName,
+          phone: heroForm.phone,
+          fromCity: heroForm.fromCity,
+          toCity: heroForm.toCity,
+          roomType: heroForm.roomType,
+          priceMin: hasHeroPriceRange ? heroPriceMin : undefined,
+          priceMax: hasHeroPriceRange ? heroPriceMax : undefined,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Gönderim başarısız')
+
+      setHeroSubmitMessage('Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.')
+      setHeroForm({
+        fromCity: '',
+        toCity: '',
+        roomType: '1+1',
+        fullName: '',
+        phone: '',
+      })
+    } catch {
+      setHeroSubmitMessage('Bir hata oluştu. Lütfen tekrar deneyin.')
+    } finally {
+      setHeroSubmitLoading(false)
+    }
+  }
 
   return (
     <section className="relative overflow-hidden bg-white">
@@ -73,186 +116,283 @@ export default function HeroSection() {
         backgroundSize: '60px 60px'
       }}></div>
 
-      <div className="container mx-auto px-4 py-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          <div className="space-y-8 animate-fade-in">
-            <div className="inline-flex items-center gap-2 bg-muted px-4 py-2 rounded-lg shadow-sm border border-border">
-              <div className="flex -space-x-2">
-                {[
-                  'https://i.pravatar.cc/32?img=11',
-                  'https://i.pravatar.cc/32?img=25',
-                  'https://i.pravatar.cc/32?img=47',
-                  'https://i.pravatar.cc/32?img=58',
-                ].map((src, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                    <Image src={src} alt="Müşteri" width={32} height={32} className="rounded-full object-cover" />
-                  </div>
-                ))}
-              </div>
-              <span className="text-sm font-medium text-foreground">10,000+ Mutlu Müşteri</span>
-              <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={i} className="w-4 h-4 fill-secondary text-secondary" />
-                ))}
-              </div>
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -right-32 top-0 h-full w-[520px] bg-gradient-to-b from-sky-100/70 via-sky-50/40 to-transparent blur-2xl md:block hidden" />
+        <div className="absolute -right-20 top-24 h-72 w-72 rounded-full border border-sky-200/60 md:block hidden" />
+        <div className="absolute -right-6 top-44 h-96 w-96 rounded-full border border-sky-200/40 md:block hidden" />
+      </div>
+
+      <div className="container mx-auto px-4 py-10 md:py-16 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="w-4 h-4 text-primary" />
+              <span>{cities[activeCity]}&apos;dan Türkiye&apos;nin Her Noktasına</span>
             </div>
 
-            <div className="space-y-4">
-              <h1 className="text-5xl font-bold leading-tight text-foreground">
-                Taşınmanın En Kolay Yolu
+            <div className="mt-6 space-y-3">
+              <h1 className="text-4xl md:text-[2.7rem] md:leading-[1] font-extrabold leading-[1.05] text-foreground">
+                Şehirlerarası Evden Eve <span className="text-orange-500">Nakliyat</span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                Profesyonel ekibimiz ve modern araçlarımızla{' '}
-                <span className="font-semibold text-primary">
-                  {cities[activeCity]}
-                </span>
-                {' '}ve tüm Türkiye&apos;de güvenli nakliyat hizmeti sunuyoruz.
+
+              <div className="text-2xl md:text-3xl font-semibold text-foreground">
+                Level ile <span className="font-[cursive] italic text-orange-600">Seviye Atlayın.</span>
+              </div>
+
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                {cities[activeCity]} çıkışlı şehirlerarası evden eve nakliyat hizmetimiz ile Türkiye&apos;nin tüm illerine sigortalı,
+                sözleşmeli ve profesyonel taşıma hizmeti sağlıyoruz.
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              {features.map((feature, index) => (
-                <div 
-                  key={index}
-                  className="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-border"
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <Link href={`tel:${(settings.phone || '4446502').toString().replace(/\s/g, '')}`} className="block">
+                <Button
+                  size="lg"
+                  className="w-full h-16 sm:h-[62px] justify-start gap-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6"
                 >
-                  <div className="p-2 rounded-lg bg-muted">
-                    <feature.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="font-medium text-foreground text-sm">{feature.text}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              {settings.whatsapp && (
-                <a
-                  href={`https://wa.me/${settings.whatsapp.replace(/\s/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button size="lg" className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-white px-8 py-4 font-semibold">
-                    WhatsApp Hattı
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </a>
-              )}
-              <Link href="tel:4446502">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-4 font-semibold">
-                  <Phone className="mr-2 w-5 h-5" />
-                  444 65 02
+                  <span className="flex items-center gap-3">
+                    <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+                      <Phone className="w-5 h-5" />
+                    </span>
+                    <span className="text-left leading-tight">
+                      <span className="block text-sm font-semibold">Hemen Ara</span>
+                      <span className="block text-xs text-white/90">{(settings.phone || '444 65 02').toString()}</span>
+                    </span>
+                  </span>
+                  <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
                 </Button>
               </Link>
+
+              {settings.whatsapp ? (
+                <a
+                  href={`https://wa.me/${settings.whatsapp.toString().replace(/\s/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Button
+                    size="lg"
+                    className="w-full h-16 sm:h-[62px] justify-start gap-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6"
+                  >
+                    <span className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+                        <MessageCircle className="w-5 h-5" />
+                      </span>
+                      <span className="text-left leading-tight">
+                        <span className="block text-sm font-semibold">WhatsApp</span>
+                        <span className="block text-xs text-white/90">Hızlı Yazın</span>
+                      </span>
+                    </span>
+                    <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
+                  </Button>
+                </a>
+              ) : (
+                <div />
+              )}
+
+              {settings.instagram ? (
+                <a
+                  href={settings.instagram.toString()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Button
+                    size="lg"
+                    className="w-full h-16 sm:h-[62px] justify-start gap-4 text-white hover:opacity-95 px-6"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(135deg, #405DE6 0%, #5B51D8 12%, #833AB4 24%, #C13584 38%, #E1306C 52%, #FD1D1D 66%, #F56040 78%, #FCAF45 90%, #FFDC80 100%)',
+                    }}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+                        <Instagram className="w-5 h-5" />
+                      </span>
+                      <span className="text-left leading-tight">
+                        <span className="block text-sm font-semibold">Instagram</span>
+                        <span className="block text-xs text-white/90">Bizi Takip Edin</span>
+                      </span>
+                    </span>
+                    <ArrowRight className="w-5 h-5 text-white/90 ml-auto" />
+                  </Button>
+                </a>
+              ) : (
+                <div />
+              )}
             </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-6 pt-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{stats.customers.toLocaleString()}+</div>
-                <div className="text-sm text-muted-foreground">Müşteri</div>
+            <div className="mt-6 rounded-xl border border-border bg-white shadow-sm overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="p-4 md:p-5 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-xl font-bold">
+                    G
+                  </div>
+                  <div>
+                    <div className="font-semibold text-foreground">Google&apos;da 4.9/5</div>
+                    <div className="flex items-center gap-1 text-orange-500 leading-none mt-1">
+                      <span>★★★★★</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1">850+ doğrulanmış yorum</div>
+                  </div>
+                </div>
+
+                <div className="border-t md:border-t-0 md:border-l border-border p-4 md:p-5">
+                  <div className="font-semibold text-emerald-600">Şikayet Yok!</div>
+                  <div className="text-sm text-foreground font-medium mt-1">0 şikayet kaydı</div>
+                  <div className="text-sm text-muted-foreground mt-1">Bugüne kadar hiçbir şikayet bulunmamaktadır.</div>
+                </div>
               </div>
-              <div className="w-px h-12 bg-border"></div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{stats.years}+</div>
-                <div className="text-sm text-muted-foreground">Yıl Tecrübe</div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5 text-primary" />
+                </div>
+                <div className="text-sm font-medium text-foreground">%100 Sigortalı Taşıma</div>
               </div>
-              <div className="w-px h-12 bg-border"></div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{stats.cities}</div>
-                <div className="text-sm text-muted-foreground">Şehir</div>
+
+              <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <Award className="w-5 h-5 text-primary" />
+                </div>
+                <div className="text-sm font-medium text-foreground">15+ Yıl Tecrübe</div>
               </div>
-              <div className="w-px h-12 bg-border"></div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{stats.rating.toFixed(1)}</div>
-                <div className="text-sm text-muted-foreground">Puan</div>
+
+              <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-primary" />
+                </div>
+                <div className="text-sm font-medium text-foreground">Türkiye Geneli Hizmet</div>
               </div>
             </div>
           </div>
 
-          <div className="relative animate-fade-in-right">
-            <div className="bg-white rounded-lg shadow-lg p-8 border border-border relative">
-              <div className="space-y-6">
-                <div className="text-center space-y-2">
-                  <h3 className="text-2xl font-bold text-foreground">Hızlı Teklif Alın</h3>
-                  <p className="text-muted-foreground">2 dakikada ücretsiz fiyat teklifi</p>
+          <div className="md:pt-2 h-full">
+            <div className="rounded-2xl bg-white border border-border shadow-sm p-6 h-full flex flex-col">
+              <div className="text-center space-y-1">
+                <div className="text-xl font-bold text-foreground">Hızlı Teklif Alın</div>
+                <div className="text-sm text-muted-foreground">2 dakikada ücretsiz fiyat teklifi</div>
+              </div>
+
+              <form onSubmit={handleHeroSubmit} className="mt-6 space-y-4 flex-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">İl (Nereden)</label>
+                    <input
+                      type="text"
+                      value={heroForm.fromCity}
+                      onChange={(e) => setHeroForm((p) => ({ ...p, fromCity: e.target.value }))}
+                      placeholder="Örn: İstanbul"
+                      className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">İl (Nereye)</label>
+                    <input
+                      type="text"
+                      value={heroForm.toCity}
+                      onChange={(e) => setHeroForm((p) => ({ ...p, toCity: e.target.value }))}
+                      placeholder="Örn: Ankara"
+                      className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
-                <form className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Adınız Soyadınız</label>
-                      <input
-                        type="text"
-                        placeholder="Örn: Ahmet Yılmaz"
-                        className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all"
-                      />
-                    </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">Ev Tipi</label>
+                  <div className="grid grid-cols-5 gap-2">
+                    {['1+0', '1+1', '2+1', '3+1', '4+1'].map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setHeroForm((p) => ({ ...p, roomType: t }))}
+                        className={
+                          `h-10 rounded-md border text-sm font-medium transition-colors ` +
+                          (heroForm.roomType === t
+                            ? 'bg-primary text-primary-foreground border-primary'
+                            : 'bg-white text-foreground border-border hover:bg-muted')
+                        }
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Telefon Numaranız</label>
-                      <input
-                        type="tel"
-                        placeholder="0555 555 55 55"
-                        className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all"
-                      />
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">Ad Soyad</label>
+                    <input
+                      type="text"
+                      value={heroForm.fullName}
+                      onChange={(e) => setHeroForm((p) => ({ ...p, fullName: e.target.value }))}
+                      placeholder="Örn: Ahmet Yılmaz"
+                      className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all"
+                    />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Nereden</label>
-                      <select className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all">
-                        <option>İstanbul</option>
-                        <option>Ankara</option>
-                        <option>İzmir</option>
-                        <option>Bursa</option>
-                      </select>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">Telefon</label>
+                    <input
+                      type="tel"
+                      value={heroForm.phone}
+                      onChange={(e) => setHeroForm((p) => ({ ...p, phone: e.target.value }))}
+                      placeholder="0555 555 55 55"
+                      className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                {isHeroPriceReady && hasHeroPriceRange && (
+                  <div className="rounded-xl border border-border bg-gradient-to-br from-muted/50 to-white p-4 text-center">
+                    <div className="text-xs text-muted-foreground">Tahmini fiyat aralığındadır</div>
+                    <div className="mt-1 text-2xl font-extrabold text-foreground">
+                      {heroPriceMin.toLocaleString('tr-TR')} TL - {heroPriceMax.toLocaleString('tr-TR')} TL
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Nereye</label>
-                      <select className="w-full px-4 py-3 rounded-lg border border-input focus:border-primary focus:ring-2 focus:ring-ring/20 outline-none transition-all">
-                        <option>Ankara</option>
-                        <option>İstanbul</option>
-                        <option>İzmir</option>
-                        <option>Antalya</option>
-                      </select>
+                    <div className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                      Daha net fiyat için bilgilerinizi gönderin veya WhatsApp üzerinden paylaşın, ekibimiz size hızlıca dönüş yapsın.
                     </div>
                   </div>
+                )}
 
-                  <Button className="w-full bg-secondary hover:bg-secondary/90 text-white py-4 font-semibold">
-                    Teklif Al
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Button type="submit" disabled={heroSubmitLoading} className="w-full bg-secondary hover:bg-secondary/90 text-white py-6 font-semibold">
+                    {heroSubmitLoading ? 'Gönderiliyor...' : 'Gönder'}
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
-                </form>
 
-                <div className="flex items-center justify-center gap-6 pt-4 border-t border-border">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                    <span>Ücretsiz</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                    <span>Hızlı Yanıt</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                    <span>Güvenli</span>
-                  </div>
+                  {settings.whatsapp ? (
+                    <a
+                      href={heroWhatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button type="button" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-6 font-semibold">
+                        WhatsApp Gönder
+                        <ArrowRight className="ml-2 w-5 h-5" />
+                      </Button>
+                    </a>
+                  ) : (
+                    <div className="hidden sm:block" />
+                  )}
                 </div>
-              </div>
+
+                <div className="text-xs text-muted-foreground text-center">
+                  Bilgilerinizi aldıktan sonra en kısa sürede sizinle iletişime geçeceğiz.
+                </div>
+
+                {heroSubmitMessage && (
+                  <div className="text-xs text-center text-muted-foreground">
+                    {heroSubmitMessage}
+                  </div>
+                )}
+              </form>
             </div>
-
-            <div className="absolute -top-6 -left-6 bg-white rounded-lg shadow-lg p-4 animate-float border border-border">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-muted rounded-lg">
-                  <Users className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-foreground">Aktif Müşteri</div>
-                  <div className="text-xs text-muted-foreground">Şu an 127 kişi online</div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
