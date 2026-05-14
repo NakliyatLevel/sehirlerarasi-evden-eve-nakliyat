@@ -93,7 +93,8 @@ export async function POST(request: Request) {
       })
     } catch (emailError) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('Email send failed:', emailError)
+        // eslint-disable-next-line no-console
+        console.error('Email send failed:', emailError)
       }
     }
 
