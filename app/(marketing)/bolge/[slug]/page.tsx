@@ -160,7 +160,7 @@ export default async function ServiceAreaDetailPage({
           {/* Sidebar */}
           <div className="space-y-6">
             {/* İletişim Kartı */}
-            <div className="bg-primary text-white rounded-lg p-6 sticky top-6">
+            <div className="bg-primary text-white rounded-lg p-6 sticky top-[8.5rem]">
               <h3 className="text-xl font-bold mb-4">Hemen Teklif Alın</h3>
               <p className="text-primary-foreground/90 mb-6 text-sm">
                 {area.city} bölgesinde taşınma planınız için ücretsiz fiyat teklifi alın

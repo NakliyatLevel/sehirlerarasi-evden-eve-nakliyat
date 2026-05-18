@@ -1,11 +1,13 @@
 import { prisma } from '@/lib/db'
 import { cache } from 'react'
+import { unstable_noStore as noStore } from 'next/cache'
 
 /**
  * Site ayarlarını veritabanından getirir
  * Tüm ayarlar key-value formatında döner
  */
 export async function getSiteSettings() {
+  noStore()
   const settings = await prisma.siteSetting.findMany({
     select: {
       key: true,
@@ -26,6 +28,7 @@ export async function getSiteSettings() {
  * Tek bir site ayarını getirir
  */
 export async function getSiteSetting(key: string) {
+  noStore()
   const setting = await prisma.siteSetting.findUnique({
     where: { key },
   })

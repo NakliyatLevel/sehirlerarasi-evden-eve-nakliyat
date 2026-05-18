@@ -274,14 +274,11 @@ export default function Header() {
               Referanslar
             </Link>
             <div className="relative group">
-              <button className="flex items-center gap-1 hover:text-primary transition">
+              <Link href="/galeri" className="flex items-center gap-1 hover:text-primary transition">
                 Galeri
                 <ChevronDown className="w-4 h-4" />
-              </button>
+              </Link>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <Link href="/galeri/videolar" className="block px-4 py-3 hover:bg-muted transition text-sm">
-                  Videolar
-                </Link>
                 <Link href="/galeri/araclarimiz" className="block px-4 py-3 hover:bg-muted transition text-sm">
                   Araçlarımız
                 </Link>

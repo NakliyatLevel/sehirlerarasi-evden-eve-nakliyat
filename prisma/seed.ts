@@ -32,6 +32,13 @@ async function main() {
     { key: 'address', value: 'İstanbul, Türkiye' },
     { key: 'seo_title', value: 'Evden Eve Nakliyat - Profesyonel Taşımacılık' },
     { key: 'seo_description', value: 'Profesyonel evden eve nakliyat hizmetleri' },
+    { key: 'smtp_host', value: 'smtp.zoho.com' },
+    { key: 'smtp_port', value: '587' },
+    { key: 'smtp_secure', value: 'false' },
+    { key: 'smtp_user', value: 'bilgi@levelnakliyat.com.tr' },
+    { key: 'smtp_pass', value: 'Colakogullari2026++' },
+    { key: 'smtp_from', value: 'bilgi@levelnakliyat.com.tr' },
+    { key: 'smtp_to', value: 'bilgi@levelnakliyat.com.tr' },
   ]
 
   for (const setting of siteSettings) {
@@ -120,10 +127,16 @@ async function main() {
 
   // Galeri - upsert ile tekrar oluşturulmaz
   const gallery = [
-    { id: 'gallery-1', title: 'Araç Filosu 1', image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800', category: 'vehicles', order: 1, active: true },
-    { id: 'gallery-2', title: 'Araç Filosu 2', image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800', category: 'vehicles', order: 2, active: true },
-    { id: 'gallery-3', title: 'Paketleme 1', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800', category: 'packaging', order: 3, active: true },
-    { id: 'gallery-4', title: 'Paketleme 2', image: 'https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=800', category: 'packaging', order: 4, active: true },
+    { id: 'gallery-1', title: 'Nakliyat Aracı', image: '/uploads/nakliyat-araci.webp', category: 'vehicles', order: 1, active: true },
+    { id: 'gallery-2', title: 'Araçlarımız', image: '/uploads/araclarimiz.webp', category: 'vehicles', order: 2, active: true },
+    { id: 'gallery-3', title: 'Ofis Eşyası Ambalaj', image: '/uploads/ofis-esyasi-ambalaj.webp', category: 'packaging', order: 3, active: true },
+    { id: 'gallery-4', title: 'Ofis Eşyası Paketleme', image: '/uploads/ofis-esyasi-paketleme.webp', category: 'packaging', order: 4, active: true },
+    { id: 'gallery-5', title: 'Eşya Taşıma', image: '/uploads/esya-tasima.webp', category: 'packaging', order: 5, active: true },
+    { id: 'gallery-6', title: 'Eşya Paketleme', image: '/uploads/esya-paketleme.webp', category: 'packaging', order: 6, active: true },
+    { id: 'gallery-7', title: 'Eşya Ambalaj', image: '/uploads/esya-ambalaj.webp', category: 'packaging', order: 7, active: true },
+    { id: 'gallery-8', title: 'Profesyonel Paketleme', image: '/uploads/paketleme.webp', category: 'packaging', order: 8, active: true },
+    { id: 'gallery-9', title: 'Şehirlerarası Eşya Paketleme', image: '/uploads/sehirlerarasi-esya-paketleme.webp', category: 'packaging', order: 9, active: true },
+    { id: 'gallery-10', title: 'Ofis Nakliyat Paketleme', image: '/uploads/ofis-nakliyat-paketleme.webp', category: 'packaging', order: 10, active: true },
   ]
 
   for (const item of gallery) {

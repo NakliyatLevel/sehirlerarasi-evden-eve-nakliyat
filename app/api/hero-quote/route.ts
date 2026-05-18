@@ -5,37 +5,62 @@ import { sendHeroQuickQuoteEmail } from '@/lib/email/send'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const { fullName, phone, fromCity, toCity, roomType, priceMin, priceMax } = body
 
-    if (!body.fullName || !body.phone || !body.fromCity || !body.toCity || !body.roomType) {
-      return NextResponse.json({ error: 'Eksik alanlar' }, { status: 400 })
+    if (!fullName?.trim() || !phone?.trim() || !fromCity?.trim() || !toCity?.trim() || !roomType?.trim()) {
+      return NextResponse.json({ error: 'Lütfen tüm alanları doldurun.' }, { status: 400 })
     }
 
-    const submission = await prisma.contactSubmission.create({
+    const rooms = Number.parseInt(roomType, 10) || Number.parseInt(roomType.split('+')[0], 10) || 1
+
+    const quote = await prisma.quote.create({
       data: {
-        name: body.fullName,
-        email: body.email || 'hero@local',
-        phone: body.phone,
-        subject: 'Hero Hızlı Teklif',
-        message: `Hero hızlı teklif talebi: ${body.fromCity} -> ${body.toCity} | Ev: ${body.roomType} | Tahmini: ${body.priceMin || ''}-${body.priceMax || ''}`,
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        email: body.email?.trim() || 'hero-form@levelnakliyat.com',
+        preferredDate: null,
+        fromAddress: fromCity.trim(),
+        fromFloor: 0,
+        fromElevator: false,
+        toAddress: toCity.trim(),
+        toFloor: 0,
+        toElevator: false,
+        distance: null,
+        propertyType: 'quick_form',
+        rooms,
+        furnitureCount: 0,
+        hasFragileItems: false,
+        hasPiano: false,
+        hasAntiques: false,
+        specialItems: null,
+        needsPacking: false,
+        needsDisassembly: false,
+        needsStorage: false,
+        needsInsurance: false,
+        additionalNotes: null,
       },
     })
 
-    const emailResult = await sendHeroQuickQuoteEmail({
-      fullName: body.fullName,
-      phone: body.phone,
-      fromCity: body.fromCity,
-      toCity: body.toCity,
-      roomType: body.roomType,
-      priceMin: body.priceMin,
-      priceMax: body.priceMax,
-    })
-
-    if (!emailResult.success) {
-      return NextResponse.json({ success: false, error: 'Email gönderilemedi', id: submission.id }, { status: 500 })
+    try {
+      await sendHeroQuickQuoteEmail({
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        fromCity: fromCity.trim(),
+        toCity: toCity.trim(),
+        roomType: roomType.trim(),
+        priceMin,
+        priceMax,
+      })
+    } catch (emailError) {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.error('Hero quote email failed:', emailError)
+      }
     }
 
-    return NextResponse.json({ success: true, id: submission.id })
-  } catch {
-    return NextResponse.json({ error: 'Teklif talebi gönderilemedi' }, { status: 500 })
+    return NextResponse.json({ success: true, quoteId: quote.id })
+  } catch (error) {
+    return NextResponse.json({ error: 'Talebiniz alınamadı.' }, { status: 500 })
   }
 }
+

@@ -2,7 +2,26 @@ import { getSiteSettings } from '@/lib/settings'
 import { Metadata } from 'next'
 import { PageHeading } from '@/components/ui/page-heading'
 import Link from 'next/link'
-import { Home, Building2, Package, Archive, Landmark, ArrowRight } from 'lucide-react'
+import {
+  Home,
+  Hotel,
+  Waves,
+  Route,
+  Globe,
+  Package,
+  Briefcase,
+  Building,
+  Factory,
+  Store,
+  Hospital,
+  ShieldCheck,
+  GraduationCap,
+  Archive,
+  Landmark,
+  CreditCard,
+  Vault,
+  ArrowRight,
+} from 'lucide-react'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
@@ -16,27 +35,27 @@ export async function generateMetadata(): Promise<Metadata> {
 const services = {
   bireysel: [
     { name: 'Ev Taşıma', slug: 'ev-tasima', icon: Home },
-    { name: 'Villa Taşımacılığı', slug: 'villa-tasimaciligi', icon: Home },
-    { name: 'Yalı Taşımacılığı', slug: 'yali-tasimaciligi', icon: Home },
+    { name: 'Villa Taşımacılığı', slug: 'villa-tasimaciligi', icon: Hotel },
+    { name: 'Yalı Taşımacılığı', slug: 'yali-tasimaciligi', icon: Waves },
     { name: 'Parça Eşya Taşımacılığı', slug: 'parca-esya-tasimaciligi', icon: Package },
-    { name: 'Şehir içi Evden Eve Nakliyat', slug: 'sehir-ici-nakliyat', icon: Home },
-    { name: 'Şehirler Arası Evden Eve Nakliyat', slug: 'sehirler-arasi-nakliyat', icon: Home },
+    { name: 'Şehir içi Evden Eve Nakliyat', slug: 'sehir-ici-nakliyat', icon: Route },
+    { name: 'Şehirler Arası Evden Eve Nakliyat', slug: 'sehirler-arasi-nakliyat', icon: Globe },
   ],
   kurumsal: [
-    { name: 'Ofis Taşımacılığı', slug: 'ofis-tasimaciligi', icon: Building2 },
-    { name: 'Kurumsal Taşımacılık', slug: 'kurumsal-tasimaciligi', icon: Building2 },
-    { name: 'Fabrika Taşımacılığı', slug: 'fabrika-tasimaciligi', icon: Building2 },
+    { name: 'Ofis Taşımacılığı', slug: 'ofis-tasimaciligi', icon: Briefcase },
+    { name: 'Kurumsal Taşımacılık', slug: 'kurumsal-tasimaciligi', icon: Building },
+    { name: 'Fabrika Taşımacılığı', slug: 'fabrika-tasimaciligi', icon: Factory },
     { name: 'Banka Taşımacılığı', slug: 'banka-tasimaciligi', icon: Landmark },
-    { name: 'Fuar Taşımacılığı', slug: 'fuar-tasimaciligi', icon: Building2 },
-    { name: 'Hastane Taşımacılığı', slug: 'hastane-tasimaciligi', icon: Building2 },
-    { name: 'Konsolosluk Taşımacılığı', slug: 'konsolosluk-tasimaciligi', icon: Building2 },
-    { name: 'Üniversite Taşımacılığı', slug: 'universite-tasimaciligi', icon: Building2 },
+    { name: 'Fuar Taşımacılığı', slug: 'fuar-tasimaciligi', icon: Store },
+    { name: 'Hastane Taşımacılığı', slug: 'hastane-tasimaciligi', icon: Hospital },
+    { name: 'Konsolosluk Taşımacılığı', slug: 'konsolosluk-tasimaciligi', icon: ShieldCheck },
+    { name: 'Üniversite Taşımacılığı', slug: 'universite-tasimaciligi', icon: GraduationCap },
   ],
   diger: [
     { name: 'Arşiv Taşımacılığı', slug: 'arsiv-tasimaciligi', icon: Archive },
-    { name: 'Müze Taşımacılığı', slug: 'muze-tasimaciligi', icon: Archive },
-    { name: 'Bankamatik Taşımacılığı', slug: 'bankamatik-tasimaciligi', icon: Landmark },
-    { name: 'Para Kasası Taşımacılığı', slug: 'para-kasasi-tasimaciligi', icon: Landmark },
+    { name: 'Müze Taşımacılığı', slug: 'muze-tasimaciligi', icon: Landmark },
+    { name: 'Bankamatik Taşımacılığı', slug: 'bankamatik-tasimaciligi', icon: CreditCard },
+    { name: 'Para Kasası Taşımacılığı', slug: 'para-kasasi-tasimaciligi', icon: Vault },
   ],
 }
 
@@ -60,7 +79,7 @@ export default async function HizmetlerimizPage() {
               Ev, villa ve yalı taşımacılığından parça eşya taşımaya kadar tüm bireysel ihtiyaçlarınız için hizmetinizdeyiz.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.bireysel.map((service) => (
               <Link
                 key={service.slug}
@@ -96,7 +115,7 @@ export default async function HizmetlerimizPage() {
               Ofis, fabrika, banka ve diğer kurumsal taşımacılık ihtiyaçlarınız için özel çözümler sunuyoruz.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.kurumsal.map((service) => (
               <Link
                 key={service.slug}
@@ -130,7 +149,7 @@ export default async function HizmetlerimizPage() {
               Özel taşımacılık ihtiyaçlarınız için uzman ekibimiz ve özel ekipmanlarımız ile hizmetinizdeyiz.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.diger.map((service) => (
               <Link
                 key={service.slug}

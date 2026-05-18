@@ -169,20 +169,25 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
             {/* Galeri */}
             <li>
-              <button
-                onClick={() => setIsGaleriOpen(!isGaleriOpen)}
-                className="w-full flex items-center justify-between py-2 px-4 hover:bg-gray-100 rounded-md transition"
-              >
-                <span>Galeri</span>
-                {isGaleriOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </button>
+              <div className="flex items-center justify-between py-2 px-4 hover:bg-gray-100 rounded-md transition">
+                <Link
+                  href="/galeri"
+                  onClick={onClose}
+                  className="flex-1 text-left"
+                >
+                  Galeri
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setIsGaleriOpen(!isGaleriOpen)}
+                  className="p-2 text-muted-foreground hover:text-primary transition"
+                  aria-label="Galeri alt menüsünü aç/kapat"
+                >
+                  {isGaleriOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+              </div>
               {isGaleriOpen && (
                 <ul className="ml-4 mt-1 space-y-1 border-l-2 border-primary/20 pl-2">
-                  <li>
-                    <Link href="/galeri/videolar" onClick={onClose} className="block py-2 px-3 hover:bg-gray-100 rounded-md transition text-sm text-gray-700">
-                      Videolar
-                    </Link>
-                  </li>
                   <li>
                     <Link href="/galeri/araclarimiz" onClick={onClose} className="block py-2 px-3 hover:bg-gray-100 rounded-md transition text-sm text-gray-700">
                       Araçlarımız

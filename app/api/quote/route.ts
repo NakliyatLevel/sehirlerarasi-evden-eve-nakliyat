@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { sendQuoteEmail } from '@/lib/email/send'
 
 export async function POST(request: Request) {
   try {
@@ -34,6 +35,42 @@ export async function POST(request: Request) {
         status: 'pending',
       },
     })
+
+    try {
+      await sendQuoteEmail({
+        name: body.fullName,
+        email: body.email,
+        phone: body.phone,
+        type: 'local',
+        details: {
+          preferredDate: body.preferredDate,
+          fromAddress: body.fromAddress,
+          fromFloor: body.fromFloor,
+          fromElevator: body.fromElevator,
+          toAddress: body.toAddress,
+          toFloor: body.toFloor,
+          toElevator: body.toElevator,
+          distance: body.distance,
+          propertyType: body.propertyType,
+          rooms: body.rooms,
+          furnitureCount: body.furnitureCount,
+          hasFragileItems: body.hasFragileItems,
+          hasPiano: body.hasPiano,
+          hasAntiques: body.hasAntiques,
+          specialItems: body.specialItems,
+          needsPacking: body.needsPacking,
+          needsDisassembly: body.needsDisassembly,
+          needsStorage: body.needsStorage,
+          needsInsurance: body.needsInsurance,
+          additionalNotes: body.additionalNotes,
+        },
+      })
+    } catch (emailError) {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.error('Quote email failed:', emailError)
+      }
+    }
 
     return NextResponse.json({ success: true, quote })
   } catch (error) {

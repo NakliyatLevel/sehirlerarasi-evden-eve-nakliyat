@@ -4,6 +4,11 @@ import { Metadata } from 'next'
 import { PageHeading } from '@/components/ui/page-heading'
 import GalleryGrid from '@/components/gallery/GalleryGrid'
 
+const fallbackVehicleGallery = [
+  { id: 'fallback-vehicle-1', title: 'Nakliyat Aracı', image: '/uploads/nakliyat-araci.webp' },
+  { id: 'fallback-vehicle-2', title: 'Araçlarımız', image: '/uploads/araclarimiz.webp' },
+]
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
   
@@ -16,9 +21,12 @@ export async function generateMetadata(): Promise<Metadata> {
 async function getVehicleGallery() {
   try {
     const gallery = await prisma.gallery.findMany({
-      where: { 
+      where: {
         active: true,
-        category: 'vehicles'
+        category: 'vehicles',
+        image: {
+          startsWith: '/uploads/'
+        }
       },
       orderBy: { order: 'asc' },
     })
@@ -38,19 +46,13 @@ export default async function AraclarimizPage() {
         title="Araçlarımız"
         description="Modern ve güvenli araç filomuz ile hizmetinizdeyiz"
         breadcrumbs={[
-          { label: 'Galeri', href: '/galeri/videolar' },
+          { label: 'Galeri', href: '/galeri' },
           { label: 'Araçlarımız' }
         ]}
       />
 
       <div className="container mx-auto px-4 py-16 max-w-7xl">
-        {gallery.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Henüz araç görseli eklenmemiş</p>
-          </div>
-        ) : (
-          <GalleryGrid items={gallery} />
-        )}
+        <GalleryGrid items={gallery.length > 0 ? gallery : fallbackVehicleGallery} />
       </div>
     </div>
   )

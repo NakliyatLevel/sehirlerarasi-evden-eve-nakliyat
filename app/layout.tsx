@@ -12,6 +12,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Evden Eve Nakliyat',
   description: 'Profesyonel evden eve nakliyat hizmetleri',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 }
 
 export default function RootLayout({
