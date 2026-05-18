@@ -40,6 +40,17 @@ prisma/migrations/*
 # Uploads (user generated content)
 /public/uploads/*
 !public/uploads/.gitkeep
+# Track critical marketing assets
+!public/uploads/nakliyat-araci.webp
+!public/uploads/araclarimiz.webp
+!public/uploads/ofis-esyasi-ambalaj.webp
+!public/uploads/ofis-esyasi-paketleme.webp
+!public/uploads/esya-tasima.webp
+!public/uploads/esya-paketleme.webp
+!public/uploads/esya-ambalaj.webp
+!public/uploads/paketleme.webp
+!public/uploads/sehirlerarasi-esya-paketleme.webp
+!public/uploads/ofis-nakliyat-paketleme.webp
 
 # Database backups
 /backups/*
